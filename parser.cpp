@@ -26,7 +26,7 @@ void Parser::parse()
       std::getline(m_input, wstr);
       if (!weatherFound)
       {
-         std::wstring weatherTmpl = L"<div class=\"weather__content\"><a aria-label=\"";
+         const std::wstring weatherTmpl = L"<div class=\"weather__content\"><a aria-label=\"";
          int pos = wstr.find(weatherTmpl);
          if (pos != std::wstring::npos)
          {
@@ -40,35 +40,31 @@ void Parser::parse()
       }
       if (!usdFound)
       {
-         std::wstring curTmpl = L"\"inline-stocks__value_inner\">";
-         std::wstring usdTmpl = L"USD";
-         int pos = wstr.find(usdTmpl);
-         if (pos != std::wstring::npos)
-         {
-            pos = wstr.find(curTmpl, pos + usdTmpl.length());
-            pos += curTmpl.length();
-            m_usd.setCurrency(wstr.substr(pos, wstr.find('<', pos) - pos));
-            usdFound = true;
-         }
+         fillCurrency(wstr, L"USD", usdFound, m_usd);
       }
       if (!eurFound)
       {
-         std::wstring curTmpl = L"\"inline-stocks__value_inner\">";
-         std::wstring eurTmpl = L"EUR";
-         int pos = wstr.find(eurTmpl);
-         if (pos != std::wstring::npos)
-         {
-            pos = wstr.find(curTmpl, pos + eurTmpl.length());
-            pos += curTmpl.length();
-            m_eur.setCurrency(wstr.substr(pos, wstr.find('<', pos) - pos));
-            eurFound = true;
-         }
+         fillCurrency(wstr, L"EUR", eurFound, m_eur);
       }
       
       if (weatherFound and usdFound and eurFound)
       {
          break;
       }
+   }
+}
+
+void Parser::fillCurrency(const std::wstring& wstr, const std::wstring& pattern, bool& currencyFound, Currency& currency)
+{
+   const std::wstring curTmpl = L"\"inline-stocks__value_inner\">";
+   
+   int pos = wstr.find(pattern);
+   if (pos != std::wstring::npos)
+   {
+      pos = wstr.find(curTmpl, pos + pattern.length());
+      pos += curTmpl.length();
+      currency.setCurrency(wstr.substr(pos, wstr.find('<', pos) - pos));
+      currencyFound = true;
    }
 }
 

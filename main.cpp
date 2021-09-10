@@ -19,12 +19,12 @@ int main()
    }
    catch (const std::exception& ex)
    {
-      std::cerr << ex.what() << std::endl;
+      std::wcerr << ex.what() << std::endl;
       return EXIT_FAILURE;
    }
    catch (...)
    {
-      std::cerr << "Something goes wrong." << std::endl;
+      std::wcerr << "Something goes wrong." << std::endl;
       return EXIT_FAILURE;
    }
 

@@ -15,6 +15,7 @@ public:
    Parser& operator = (const Parser&) = delete;
    
    void parse();
+   void fillCurrency(const std::wstring& wstr, const std::wstring& pattern, bool& eurFound, Currency& currency);
    void print() const;
 private:
    std::wifstream m_input;
